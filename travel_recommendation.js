@@ -8,13 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function searchCondition() {
         const input = document.getElementById('searchInput').value.toLowerCase();
-        let resultDiv = document.getElementById('result');
-        if (!resultDiv) {
-            resultDiv = document.createElement('div');
-            resultDiv.id = 'result';
-            document.body.appendChild(resultDiv);
-        }
-        resultDiv.innerHTML = '';
 
         fetch('travel_recommendation_api.json')
             .then(response => response.json())
@@ -25,14 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayResults(data.temples, resultDiv);
                 } else {
                     const matchingCountry = data.countries.find(country => 
-                        country.name.toLowerCase() === input || 
-                        country.cities.some(city => city.name.toLowerCase().includes(input))
-                    );
+                        country.name.toLowerCase() === input);
 
                     if (matchingCountry) {
                         displayResults(matchingCountry.cities, resultDiv);
                     } else {
-                        resultDiv.innerHTML = '<p>No matching results found. Try "beach," "temple," or a country name.</p>';
+                        resultDiv.innerHTML = '<p>No matching results found.</p>';
                     }
                 }
             })
@@ -48,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        items.slice(0, 2).forEach(item => {
+        items.forEach(item => {
             resultDiv.innerHTML += `
                 <div class="result-item">
                     <h3>${item.name}</h3>
